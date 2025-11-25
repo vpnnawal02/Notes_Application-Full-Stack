@@ -1,32 +1,24 @@
 from pathlib import Path
 from datetime import timedelta
-from dotenv import load_dotenv
 import os
+from dotenv import load_dotenv
 
 load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# SECURITY
-SECRET_KEY = os.getenv("SECRET_KEY")
-DEBUG = os.getenv("DEBUG", "False").lower() == "true"
+# -------------------
+#  SECURITY SETTINGS
+# -------------------
+
+SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-key")  
+DEBUG = os.getenv("DEBUG", "True").lower() == "true"
 
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "*").split(",")
 
-# REST Framework
-REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
-    ),
-    "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.IsAuthenticated",
-    ],
-}
-
-SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
-}
+# -------------------
+#     INSTALLED APPS
+# -------------------
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -41,8 +33,12 @@ INSTALLED_APPS = [
     "corsheaders",
 ]
 
+# -------------------
+#      MIDDLEWARE
+# -------------------
+
 MIDDLEWARE = [
-    "corsheaders.middleware.CorsMiddleware",  
+    "corsheaders.middleware.CorsMiddleware",   # MUST BE FIRST
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -51,6 +47,10 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+# -------------------
+#         TEMPLATES
+# -------------------
 
 ROOT_URLCONF = "backend.urls"
 
@@ -71,7 +71,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "backend.wsgi.application"
 
-# DATABASE
+# -------------------
+#        DATABASE
+# -------------------
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
@@ -79,26 +82,62 @@ DATABASES = {
     }
 }
 
+# -------------------
+#   PASSWORD POLICY
+# -------------------
+
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
 ]
+
+# -------------------
+#     INTERNATIONAL
+# -------------------
 
 LANGUAGE_CODE = "en-us"
 TIME_ZONE = "UTC"
 USE_I18N = True
 USE_TZ = True
 
-STATIC_URL = "static/"
+# -------------------
+#     STATIC FILES
+# -------------------
+
+STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "static"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# CORS
+# -------------------
+#        REST FRAMEWORK
+# -------------------
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+    ],
+}
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=30),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+}
+
+# -------------------
+#          CORS
+# -------------------
+
+# Allow only your Netlify frontend
 CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOWED_ORIGINS = [
-    "https://notesapplication-02.netlify.app"
+    "https://notesapplication-02.netlify.app",
 ]
+
 CORS_ALLOW_CREDENTIALS = True
+
 CORS_ALLOW_HEADERS = [
     "accept",
     "accept-encoding",
@@ -108,6 +147,7 @@ CORS_ALLOW_HEADERS = [
     "x-csrftoken",
     "x-requested-with",
 ]
+
 CORS_ALLOW_METHODS = [
     "DELETE",
     "GET",
