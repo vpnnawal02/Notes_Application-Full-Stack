@@ -6,7 +6,7 @@ Users can register, log in using JWT authentication, and create, view, and delet
 
 Frontend (React): Netlify
 Backend (Django): Render
-Live Link: https://notesapplication-02.netlify.app/
+Live Link: https://notesapplication-02.netlify.app/register
 
 # Features
 🔐 Authentication
