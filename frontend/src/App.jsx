@@ -34,9 +34,15 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route path='/login' element={<Login />} />
+
+          {/* <Route path='/login' element={<Login />} /> */}
+          <Route path="/login" element={<Form route="/api/token/" method="login" />} />
+
           <Route path='/logout' element={<Logout />} />
-          <Route path='/register' element={<RegisterAndLogout />} />
+
+          {/* <Route path='/register' element={<RegisterAndLogout />} /> */}
+          <Route path="/register" element={<Form route="/api/user/register/" method="register" />} />
+
           <Route path='*' element={<NotFound />} />
 
           {/* testing */}
